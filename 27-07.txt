@@ -1,0 +1,14 @@
+Web component bên dưới reactjs làm gì ???
+
+React main concept
+ES6
+Class component
+Component
+Props 
+State
+Life cycle mounting updating unmounting
+Form 
+Props drilling (truyền props qua nhiều lớp ko cần thiết) cách xử lý dùng context hoặc state management: redux,recoil,mobx
+
+react diffing algorithm (thuật toán so sánh state)
+
