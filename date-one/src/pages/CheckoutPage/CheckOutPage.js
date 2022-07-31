@@ -2,10 +2,9 @@ import React, { useState } from "react";
 import { useLocation, Link } from "react-router-dom";
 import "./style/style.css";
 import { postInformationinAPI } from "../../services/APIService";
+import { checkValidate } from "../../utils/Validation";
 export default function CheckOutPage() {
   const location = useLocation();
-  const allFood = location.state.allFood;
-  const cart = location.state.cart;
   const totalPrice = location.state.totalPrice;
   const [submitInfor, setSubmitInfor] = useState(false);
   const [formData, setFormData] = useState({
@@ -25,11 +24,20 @@ export default function CheckOutPage() {
       value: null,
       error: null,
     },
+    email: {
+      value: null,
+      error: null,
+    },
   });
   const onSubmitHandler = (e) => {
     e.preventDefault();
-    const flag = checkValidate();
-    if (flag) {
+    const checkValid = checkValidate(formData);
+
+    if (checkValid.hasError) {
+      setFormData({
+        ...checkValid.data,
+      });
+    } else {
       postInforInAPi();
     }
   };
@@ -43,7 +51,7 @@ export default function CheckOutPage() {
         city: formData.city.value,
       };
       const response = await postInformationinAPI(data);
-      if(response.status === 201) {
+      if (response.status === 201) {
         setSubmitInfor(true);
       }
     } catch (err) {
@@ -51,75 +59,74 @@ export default function CheckOutPage() {
     }
   };
 
-  const checkValidate = () => {
-    const newFormData = formData;
-
-    let flag = true;
-    for (const index in newFormData) {
-      if (
-        newFormData[index].value === null ||
-        newFormData[index].value.length === 0
-      ) {
-        const error = `Please enter a valid ${index}!`;
-        newFormData[index].error = error;
-        flag = false;
-      }
-    }
-
-    setFormData({
-      ...newFormData,
-    });
-    return flag;
-  };
   const onChangeHandler = (e) => {
     const { name, value } = e.target;
-    const newFormData = formData;
-    switch (name) {
-      case "name":
-        const name = {
-          error: null,
-          value,
-        };
 
-        setFormData({
-          ...newFormData,
-          name,
-        });
-        break;
-      case "street":
-        const street = {
-          error: null,
-          value,
-        };
+    setFormData({
+      ...formData,
+      [name]: {
+        error: null,
+        value,
+      },
+    });
+    // switch (name) {
+    //   case "email":
 
-        setFormData({
-          ...newFormData,
-          street,
-        });
-        break;
-      case "code":
-        const code = {
-          error: null,
-          value,
-        };
+    //     const email = {
+    //       error: null,
+    //       value,
+    //     };
 
-        setFormData({
-          ...newFormData,
-          code,
-        });
-        break;
-      default:
-        const city = {
-          error: null,
-          value,
-        };
+    //     setFormData({
+    //       ...newFormData,
+    //       email,
+    //     });
+    //     break;
+    //   case "name":
+    //     const name = {
+    //       error: null,
+    //       value,
+    //     };
 
-        setFormData({
-          ...newFormData,
-          city,
-        });
-        break;
-    }
+    //     setFormData({
+    //       ...newFormData,
+    //       name,
+    //     });
+    //     break;
+    //   case "street":
+    //     const street = {
+    //       error: null,
+    //       value,
+    //     };
+
+    //     setFormData({
+    //       ...newFormData,
+    //       street,
+    //     });
+    //     break;
+    //   case "code":
+    //     const code = {
+    //       error: null,
+    //       value,
+    //     };
+
+    //     setFormData({
+    //       ...newFormData,
+    //       code,
+    //     });
+    //     break;
+    //   default:
+    //     const city = {
+    //       error: null,
+    //       value,
+    //     };
+
+    //     setFormData({
+    //       ...newFormData,
+    //       city,
+    //     });
+    //     break;
+    // }
   };
   const uiError = (data) => {
     return (
@@ -139,17 +146,47 @@ export default function CheckOutPage() {
         <div className="successOrder">
           <p>Order successfull</p>
           <Link to="/" className="btnCancel">
-                Back to homepage
-              </Link>
+            Back to homepage
+          </Link>
         </div>
       ) : (
         <div className="checkInfo">
           <h1>Check out</h1>
           <div className="amountPrice">
-            <p>Total Amount</p>
+            <p>Total Amount:</p>
             <p className="number">{Math.ceil(totalPrice)}</p>
           </div>
           <form onSubmit={onSubmitHandler}>
+            <div className="itemForm">
+              <label className="labelForm" htmlFor="email">
+                Your email
+              </label>
+
+              <input
+                className="iputForm"
+                id="email"
+                placeholder="Your email"
+                name="email"
+                value={formData.email.value}
+                onChange={onChangeHandler}
+                style={{
+                  border:
+                    formData.email.error !== null
+                      ? "1px solid red"
+                      : "1px solid black",
+                  marginBottom: formData.email.error !== null ? 10 : 30,
+                }}
+              />
+              {formData.email.error !== null ? (
+                <p
+                  style={{
+                    color: "red",
+                  }}
+                >
+                  {uiError(formData.email.error)}
+                </p>
+              ) : null}
+            </div>
             <div className="itemForm">
               <label className="labelForm" htmlFor="name">
                 Your name
@@ -163,8 +200,11 @@ export default function CheckOutPage() {
                 value={formData.name.value}
                 onChange={onChangeHandler}
                 style={{
-                    border: formData.name.error !== null ?  "1px solid red" : "1px solid black",
-                    marginBottom:formData.name.error !== null ?  10 : 30
+                  border:
+                    formData.name.error !== null
+                      ? "1px solid red"
+                      : "1px solid black",
+                  marginBottom: formData.name.error !== null ? 10 : 30,
                 }}
               />
               {formData.name.error !== null ? (
@@ -190,8 +230,11 @@ export default function CheckOutPage() {
                 value={formData.street.value}
                 onChange={onChangeHandler}
                 style={{
-                    border: formData.street.error !== null ?  "1px solid red" : "1px solid black",
-                    marginBottom:formData.street.error !== null ?  10 : 30
+                  border:
+                    formData.street.error !== null
+                      ? "1px solid red"
+                      : "1px solid black",
+                  marginBottom: formData.street.error !== null ? 10 : 30,
                 }}
               />
               {formData.street.error !== null
@@ -211,8 +254,11 @@ export default function CheckOutPage() {
                 value={formData.code.value}
                 onChange={onChangeHandler}
                 style={{
-                    border: formData.code.error !== null ?  "1px solid red" : "1px solid black",
-                    marginBottom:formData.code.error !== null ?  10 : 30
+                  border:
+                    formData.code.error !== null
+                      ? "1px solid red"
+                      : "1px solid black",
+                  marginBottom: formData.code.error !== null ? 10 : 30,
                 }}
               />
               {formData.code.error !== null ? (
@@ -238,8 +284,11 @@ export default function CheckOutPage() {
                 value={formData.city.value}
                 onChange={onChangeHandler}
                 style={{
-                    border: formData.city.error !== null ?  "1px solid red" : "1px solid black",
-                    marginBottom:formData.city.error !== null ?  10 : 30
+                  border:
+                    formData.city.error !== null
+                      ? "1px solid red"
+                      : "1px solid black",
+                  marginBottom: formData.city.error !== null ? 10 : 30,
                 }}
               />
               {formData.city.error !== null ? (
