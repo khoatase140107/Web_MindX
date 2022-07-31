@@ -3,7 +3,7 @@ import AddToCart from "./AddToCart";
 
 export default function ItemsFoodComponent(props) {
   const { food, addToCart, index } = props;
-  const [valueCart,setValueCart] = useState(0);
+  const [valueCart,setValueCart] = useState(1);
   
   const onChangeHandler = (e) => {
     const {  value } = e.target;

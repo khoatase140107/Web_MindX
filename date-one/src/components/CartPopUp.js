@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-
-export default function ViewCart(props) {
+import { Link } from "react-router-dom";
+export default function CartPopup(props) {
   const { allFood, cart, addToCart } = props;
   const [totalPrice, setTotalPrice] = useState(0);
 
@@ -65,7 +65,7 @@ export default function ViewCart(props) {
                               alignItems: "flex-start",
                             }}
                           >
-                            <h1>{allFood[index].name}</h1>
+                            <h5>{allFood[index].name}</h5>
                             <p
                               style={{
                                 color: "red",
@@ -143,9 +143,13 @@ export default function ViewCart(props) {
             >
               Close
             </button>
-            <button type="button" class="btn btn-primary">
+            <Link to="/checkout" state={{
+              allFood:allFood,
+              cart:cart,
+              totalPrice: totalPrice
+            }} type="button" class="btn btn-primary">
               Order
-            </button>
+            </Link>
           </div>
         </div>
       </div>
