@@ -1,12 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation, Link } from "react-router-dom";
 import "./style/style.css";
 import { postInformationinAPI } from "../../services/APIService";
 import { checkValidate } from "../../utils/Validation";
 export default function CheckOutPage() {
   const location = useLocation();
+  const allFood = location.state.allFood;
+  const cart = location.state.cart;
   const totalPrice = location.state.totalPrice;
   const [submitInfor, setSubmitInfor] = useState(false);
+  const [item, setItem] = useState(false);
+
   const [formData, setFormData] = useState({
     name: {
       value: null,
@@ -29,6 +33,25 @@ export default function CheckOutPage() {
       error: null,
     },
   });
+
+  useEffect(() => {
+    excuteOrder();
+  }, []);
+
+  const excuteOrder = () => {
+    const item = [];
+    for (const index in cart) {
+      if (cart[index] > 0) {
+        item.push({
+          ...allFood[index],
+          amount: cart[index],
+        });
+      }
+    }
+
+    setItem(item);
+  };
+
   const onSubmitHandler = (e) => {
     e.preventDefault();
     const checkValid = checkValidate(formData);
@@ -49,6 +72,8 @@ export default function CheckOutPage() {
         street: formData.street.value,
         code: formData.code.value,
         city: formData.city.value,
+        item: [...item],
+        totalPrice: Math.ceil(totalPrice),
       };
       const response = await postInformationinAPI(data);
       if (response.status === 201) {
