@@ -1,8 +1,12 @@
 import React, { useEffect } from "react";
+import { useFoodContext } from "../context/FoodContext";
 import CartPopup from "./CartPopUp";
 
 export default function CartComponet(props) {
-  const { cart, allFood, addToCart } = props;
+  const foodCtx = useFoodContext();
+
+  const { cart } = foodCtx;
+  // const { cart, allFood, addToCart } = props;
 
   useEffect(() => {}, []);
 
@@ -15,8 +19,6 @@ export default function CartComponet(props) {
     }
     return totalCart;
   };
-
-  
 
   return (
     <button
@@ -41,7 +43,7 @@ export default function CartComponet(props) {
       </svg>
       <p className="cartName">YourCart</p>
       <p className="cartNumber">{countCart()}</p>
-      <CartPopup cart={cart} allFood={allFood} addToCart={addToCart} />
+      <CartPopup />
     </button>
   );
 }

@@ -1,12 +1,14 @@
 import React, { useState } from "react";
+import { useCartContext } from "../context/CartContext";
 import AddToCart from "./AddToCart";
 
 export default function ItemsFoodComponent(props) {
-  const { food, addToCart, index } = props;
-  const [valueCart,setValueCart] = useState(1);
   
+  const { food, index } = props;
+  const [valueCart, setValueCart] = useState(1);
+
   const onChangeHandler = (e) => {
-    const {  value } = e.target;
+    const { value } = e.target;
     setValueCart(+value);
   };
 
@@ -29,7 +31,7 @@ export default function ItemsFoodComponent(props) {
             value={valueCart}
           />
         </div>
-        <AddToCart addToCart={addToCart} index={index} valueCart={valueCart} />
+        <AddToCart index={index} valueCart={valueCart} />
       </div>
     </div>
   );

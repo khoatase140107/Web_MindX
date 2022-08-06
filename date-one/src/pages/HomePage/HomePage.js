@@ -1,42 +1,18 @@
-import axios from "axios";
 import React, { useState, useEffect } from "react";
 import CartComponet from "../../components/CartComponet";
 import ItemsFoodComponent from "../../components/ItemsFoodComponent";
+import { useFoodContext } from "../../context/FoodContext";
 import "./style/style.css";
 
 export default function HomePage() {
-  const [allFood, setAllFood] = useState(null);
-  const [cart, setCart] = useState(null);
-  useEffect(() => {
-    getAllFoodFromAPI();
-  }, []);
-
-  const getAllFoodFromAPI = async () => {
-    try {
-      const response = await axios.get(
-        `https://625a91bf0ab4013f94a2d9a8.mockapi.io/meals`
-      );
-      if (response.status === 200) {
-        setAllFood(response.data.slice(0, 4));
-        setCart([0, 0, 0, 0]);
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const addToCart = (index, number) => {
-    const newCart = cart;
-    newCart[index] += Number(number);
-    
-    setCart([...newCart]);
-  };
-
+  const foodCtx = useFoodContext();
+  const {allFood} = foodCtx;
+  
   return (
     <div className="homePage">
       <div className="headerHomePage">
         <h1 className="nameFood">ReactMeals</h1>
-        <CartComponet cart={cart} allFood={allFood} addToCart={addToCart} />
+        <CartComponet />
       </div>
       <div className="imgHomePage">
         <img
@@ -62,13 +38,7 @@ export default function HomePage() {
         <div className="itemFood">
           <div className="foodInfo">
             {allFood.map((item, index) => {
-              return (
-                <ItemsFoodComponent
-                  food={item}
-                  index={index}
-                  addToCart={addToCart}
-                />
-              );
+              return <ItemsFoodComponent food={item} index={index} />;
             })}
           </div>
         </div>

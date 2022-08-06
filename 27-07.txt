@@ -12,3 +12,4 @@ Props drilling (truyền props qua nhiều lớp ko cần thiết) cách xử l�
 
 react diffing algorithm (thuật toán so sánh state)
 
+PureComponent  , shallow compare

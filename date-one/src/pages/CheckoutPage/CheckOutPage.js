@@ -3,10 +3,13 @@ import { useLocation, Link } from "react-router-dom";
 import "./style/style.css";
 import { postInformationinAPI } from "../../services/APIService";
 import { checkValidate } from "../../utils/Validation";
+import { useFoodContext } from "../../context/FoodContext";
+import { useFormik } from 'formik';
 export default function CheckOutPage() {
+  const foodCtx = useFoodContext();
+  const { allFood, cart } = foodCtx;
   const location = useLocation();
-  const allFood = location.state.allFood;
-  const cart = location.state.cart;
+
   const totalPrice = location.state.totalPrice;
   const [submitInfor, setSubmitInfor] = useState(false);
   const [item, setItem] = useState(false);

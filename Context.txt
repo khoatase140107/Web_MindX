@@ -1,0 +1,4 @@
+Context là ngữ cảnh, nôn na xây 1 cái nhà chứa dữ liệu dùng chung. ai cần xài alo tới thì nó cho sử dụng
+Context là kho dữ liệu thực chất là object chứa biến muốn tái sử dụng, kho cung cấp dữ liệu cho những thằng cần tới nó
+Muốn sử dụng context thì phải create 
+Muốn xây kho thì react cung cấp

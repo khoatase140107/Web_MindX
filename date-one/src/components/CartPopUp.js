@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useFoodContext } from "../context/FoodContext";
 export default function CartPopup(props) {
-  const { allFood, cart, addToCart } = props;
+  const foodCtx = useFoodContext();
+
+  const { allFood, cart, addToCart } = foodCtx;
+  // const {  } = props;
   const [totalPrice, setTotalPrice] = useState(0);
 
   useEffect(() => {
@@ -143,11 +147,14 @@ export default function CartPopup(props) {
             >
               Close
             </button>
-            <Link to="/checkout" state={{
-              allFood:allFood,
-              cart:cart,
-              totalPrice: totalPrice
-            }} type="button" class="btn btn-primary">
+            <Link
+              to="/checkout"
+              state={{
+                totalPrice: totalPrice,
+              }}
+              type="button"
+              class="btn btn-primary"
+            >
               Order
             </Link>
           </div>

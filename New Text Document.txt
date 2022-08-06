@@ -1,0 +1,23 @@
+Context là ngữ cảnh, nôn na xây 1 cái nhà chứa dữ liệu dùng chung. ai cần xài alo tới thì nó cho sử dụng
+Context là kho dữ liệu thực chất là object chứa biến muốn tái sử dụng, kho cung cấp dữ liệu cho những thằng cần tới nó
+Muốn sử dụng context thì phải create 
+Muốn xây kho thì react cung cấp 
+
+Context là folder riêng
+
+Kiến trúc flux tất cả state management dựa trên flux
+
+Nó giúp mình tạo ra global store và dưới component ko sử lý cập nhật state , component lấy state dùng chung 
+higher order component
+
+useMemo 
+sallow comparation
+
+
+utils dùng chứa hàm logic 
+service dung để tương tác với những thứ bên ngoài bên thứ 3
+
+
+Thư viện validate-form: react final form , formik , react hook form
+
+Solid principles
