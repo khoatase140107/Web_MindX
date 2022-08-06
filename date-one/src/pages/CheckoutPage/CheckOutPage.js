@@ -4,7 +4,8 @@ import "./style/style.css";
 import { postInformationinAPI } from "../../services/APIService";
 import { checkValidate } from "../../utils/Validation";
 import { useFoodContext } from "../../context/FoodContext";
-import { useFormik } from 'formik';
+import { useFormik } from "formik";
+import * as Yup from "yup";
 export default function CheckOutPage() {
   const foodCtx = useFoodContext();
   const { allFood, cart } = foodCtx;
@@ -14,28 +15,52 @@ export default function CheckOutPage() {
   const [submitInfor, setSubmitInfor] = useState(false);
   const [item, setItem] = useState(false);
 
-  const [formData, setFormData] = useState({
-    name: {
-      value: null,
-      error: null,
+  const formik = useFormik({
+    initialValues: {
+      name: {
+        value: null,
+        error: null,
+      },
+      street: {
+        value: null,
+        error: null,
+      },
+      code: {
+        value: null,
+        error: null,
+      },
+      city: {
+        value: null,
+        error: null,
+      },
+      email: {
+        value: null,
+        error: null,
+      },
     },
-    street: {
-      value: null,
-      error: null,
-    },
-    code: {
-      value: null,
-      error: null,
-    },
-    city: {
-      value: null,
-      error: null,
-    },
-    email: {
-      value: null,
-      error: null,
+    validationSchema: Yup.object({
+      email: Yup.string().email("Invalid Email").required("Email Required!!!"),
+      name: Yup.string().required("Name required!!!"),
+      street: Yup.string().required("Street required!!!"),
+      code: Yup.number()
+        .positive("A postal code can't start with a minus")
+        .required("Postal Code required!!!"),
+      city: Yup.string().required("City required!!!"),
+    }),
+    onSubmit: (values) => {
+      const data = {
+        name: values.name,
+        street: values.street,
+        code: values.code,
+        city: values.city,
+        item: [...item],
+        totalPrice: Math.ceil(totalPrice),
+      };
+      postInforInAPi(data);
     },
   });
+
+  const [formData, setFormData] = useState({});
 
   useEffect(() => {
     excuteOrder();
@@ -56,28 +81,19 @@ export default function CheckOutPage() {
   };
 
   const onSubmitHandler = (e) => {
-    e.preventDefault();
-    const checkValid = checkValidate(formData);
-
-    if (checkValid.hasError) {
-      setFormData({
-        ...checkValid.data,
-      });
-    } else {
-      postInforInAPi();
-    }
+    // e.preventDefault();
+    // const checkValid = checkValidate(formData);
+    // if (checkValid.hasError) {
+    //   setFormData({
+    //     ...checkValid.data,
+    //   });
+    // } else {
+    //   postInforInAPi();
+    // }
   };
 
-  const postInforInAPi = async () => {
+  const postInforInAPi = async (data) => {
     try {
-      const data = {
-        name: formData.name.value,
-        street: formData.street.value,
-        code: formData.code.value,
-        city: formData.city.value,
-        item: [...item],
-        totalPrice: Math.ceil(totalPrice),
-      };
       const response = await postInformationinAPI(data);
       if (response.status === 201) {
         setSubmitInfor(true);
@@ -184,7 +200,7 @@ export default function CheckOutPage() {
             <p>Total Amount:</p>
             <p className="number">{Math.ceil(totalPrice)}</p>
           </div>
-          <form onSubmit={onSubmitHandler}>
+          <form onSubmit={formik.handleSubmit}>
             <div className="itemForm">
               <label className="labelForm" htmlFor="email">
                 Your email
@@ -195,17 +211,20 @@ export default function CheckOutPage() {
                 id="email"
                 placeholder="Your email"
                 name="email"
-                value={formData.email.value}
-                onChange={onChangeHandler}
-                style={{
-                  border:
-                    formData.email.error !== null
-                      ? "1px solid red"
-                      : "1px solid black",
-                  marginBottom: formData.email.error !== null ? 10 : 30,
-                }}
+                value={formik.values.email.value}
+                onChange={formik.handleChange}
+                // style={{
+                //   border:
+                //     formData.email.error !== null
+                //       ? "1px solid red"
+                //       : "1px solid black",
+                //   marginBottom: formData.email.error !== null ? 10 : 30,
+                // }}
               />
-              {formData.email.error !== null ? (
+              {formik.errors.email &&
+                formik.touched.email &&
+                uiError(formik.errors.email)}
+              {/* {formData.email.error !== null ? (
                 <p
                   style={{
                     color: "red",
@@ -213,7 +232,7 @@ export default function CheckOutPage() {
                 >
                   {uiError(formData.email.error)}
                 </p>
-              ) : null}
+              ) : null} */}
             </div>
             <div className="itemForm">
               <label className="labelForm" htmlFor="name">
@@ -225,17 +244,20 @@ export default function CheckOutPage() {
                 id="name"
                 placeholder="Your name"
                 name="name"
-                value={formData.name.value}
-                onChange={onChangeHandler}
-                style={{
-                  border:
-                    formData.name.error !== null
-                      ? "1px solid red"
-                      : "1px solid black",
-                  marginBottom: formData.name.error !== null ? 10 : 30,
-                }}
+                value={formik.values.name.value}
+                onChange={formik.handleChange}
+                // style={{
+                //   border:
+                //     formData.name.error !== null
+                //       ? "1px solid red"
+                //       : "1px solid black",
+                //   marginBottom: formData.name.error !== null ? 10 : 30,
+                // }}
               />
-              {formData.name.error !== null ? (
+              {formik.errors.name &&
+                formik.touched.name &&
+                uiError(formik.errors.name)}
+              {/* {formData.name.error !== null ? (
                 <p
                   style={{
                     color: "red",
@@ -243,7 +265,7 @@ export default function CheckOutPage() {
                 >
                   {uiError(formData.name.error)}
                 </p>
-              ) : null}
+              ) : null} */}
             </div>
             <div className="itemForm">
               <label className="labelForm" htmlFor="street">
@@ -255,19 +277,22 @@ export default function CheckOutPage() {
                 id="street"
                 placeholder="Street"
                 name="street"
-                value={formData.street.value}
-                onChange={onChangeHandler}
-                style={{
-                  border:
-                    formData.street.error !== null
-                      ? "1px solid red"
-                      : "1px solid black",
-                  marginBottom: formData.street.error !== null ? 10 : 30,
-                }}
+                value={formik.values.street.value}
+                onChange={formik.handleChange}
+                // style={{
+                //   border:
+                //     formData.street.error !== null
+                //       ? "1px solid red"
+                //       : "1px solid black",
+                //   marginBottom: formData.street.error !== null ? 10 : 30,
+                // }}
               />
-              {formData.street.error !== null
+              {formik.errors.street &&
+                formik.touched.street &&
+                uiError(formik.errors.street)}
+              {/* {formData.street.error !== null
                 ? uiError(formData.street.error)
-                : null}
+                : null} */}
             </div>
             <div className="itemForm">
               <label className="labelForm" htmlFor="code">
@@ -279,17 +304,20 @@ export default function CheckOutPage() {
                 id="code"
                 placeholder="Code"
                 name="code"
-                value={formData.code.value}
-                onChange={onChangeHandler}
-                style={{
-                  border:
-                    formData.code.error !== null
-                      ? "1px solid red"
-                      : "1px solid black",
-                  marginBottom: formData.code.error !== null ? 10 : 30,
-                }}
+                value={formik.values.code.value}
+                onChange={formik.handleChange}
+                // style={{
+                //   border:
+                //     formData.code.error !== null
+                //       ? "1px solid red"
+                //       : "1px solid black",
+                //   marginBottom: formData.code.error !== null ? 10 : 30,
+                // }}
               />
-              {formData.code.error !== null ? (
+              {formik.errors.code &&
+                formik.touched.code &&
+                uiError(formik.errors.code)}
+              {/* {formData.code.error !== null ? (
                 <p
                   style={{
                     color: "red",
@@ -297,7 +325,7 @@ export default function CheckOutPage() {
                 >
                   {uiError(formData.code.error)}
                 </p>
-              ) : null}
+              ) : null} */}
             </div>
             <div className="itemForm">
               <label className="labelForm" htmlFor="city">
@@ -309,17 +337,20 @@ export default function CheckOutPage() {
                 id="city"
                 placeholder="City"
                 name="city"
-                value={formData.city.value}
-                onChange={onChangeHandler}
-                style={{
-                  border:
-                    formData.city.error !== null
-                      ? "1px solid red"
-                      : "1px solid black",
-                  marginBottom: formData.city.error !== null ? 10 : 30,
-                }}
+                value={formik.values.city.value}
+                onChange={formik.handleChange}
+                // style={{
+                //   border:
+                //     formData.city.error !== null
+                //       ? "1px solid red"
+                //       : "1px solid black",
+                //   marginBottom: formData.city.error !== null ? 10 : 30,
+                // }}
               />
-              {formData.city.error !== null ? (
+              {formik.errors.city &&
+                formik.touched.city &&
+                uiError(formik.errors.city)}
+              {/* {formData.city.error !== null ? (
                 <p
                   style={{
                     color: "red",
@@ -327,7 +358,7 @@ export default function CheckOutPage() {
                 >
                   {uiError(formData.city.error)}
                 </p>
-              ) : null}
+              ) : null} */}
             </div>
             <div>
               <Link to="/" className="btnCancel">
