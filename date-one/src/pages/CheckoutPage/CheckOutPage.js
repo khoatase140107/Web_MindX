@@ -17,26 +17,11 @@ export default function CheckOutPage() {
 
   const formik = useFormik({
     initialValues: {
-      name: {
-        value: null,
-        error: null,
-      },
-      street: {
-        value: null,
-        error: null,
-      },
-      code: {
-        value: null,
-        error: null,
-      },
-      city: {
-        value: null,
-        error: null,
-      },
-      email: {
-        value: null,
-        error: null,
-      },
+      name: "",
+      street: "",
+      code:"",
+      city: "",
+      email: "",
     },
     validationSchema: Yup.object({
       email: Yup.string().email("Invalid Email").required("Email Required!!!"),
@@ -211,7 +196,7 @@ export default function CheckOutPage() {
                 id="email"
                 placeholder="Your email"
                 name="email"
-                value={formik.values.email.value}
+                value={formik.values.email}
                 onChange={formik.handleChange}
                 // style={{
                 //   border:
@@ -244,7 +229,7 @@ export default function CheckOutPage() {
                 id="name"
                 placeholder="Your name"
                 name="name"
-                value={formik.values.name.value}
+                value={formik.values.name}
                 onChange={formik.handleChange}
                 // style={{
                 //   border:
@@ -277,7 +262,7 @@ export default function CheckOutPage() {
                 id="street"
                 placeholder="Street"
                 name="street"
-                value={formik.values.street.value}
+                value={formik.values.street}
                 onChange={formik.handleChange}
                 // style={{
                 //   border:
@@ -304,7 +289,7 @@ export default function CheckOutPage() {
                 id="code"
                 placeholder="Code"
                 name="code"
-                value={formik.values.code.value}
+                value={formik.values.code}
                 onChange={formik.handleChange}
                 // style={{
                 //   border:
@@ -337,7 +322,7 @@ export default function CheckOutPage() {
                 id="city"
                 placeholder="City"
                 name="city"
-                value={formik.values.city.value}
+                value={formik.values.city}
                 onChange={formik.handleChange}
                 // style={{
                 //   border:
