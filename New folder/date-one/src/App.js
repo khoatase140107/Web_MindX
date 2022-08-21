@@ -20,6 +20,7 @@ function App() {
       );
       if (response.status === 200) {
         setAllFood(response.data.slice(0, 4));
+        console.log(response.data.slice(0, 4))
         setCart([0, 0, 0, 0]);
       }
     } catch (err) {
@@ -28,9 +29,8 @@ function App() {
   };
 
   const addToCart = (index, number) => {
-    const newCart = cart;
+    const newCart = [...cart];
     newCart[index] += Number(number);
-
     setCart([...newCart]);
   };
   return (

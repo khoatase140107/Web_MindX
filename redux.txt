@@ -1,0 +1,4 @@
+Trong 1 folder context sẽ có 3 file 
+Reducer
+State
+Context

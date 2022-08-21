@@ -1,0 +1,4 @@
+NodeJS là kiến trúc client server
+NodeJS là run time environment
+
+routing - controller (xử lý logic) - tầng model (lưu DB) 

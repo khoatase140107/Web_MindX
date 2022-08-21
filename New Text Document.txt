@@ -21,3 +21,6 @@ service dung để tương tác với những thứ bên ngoài bên thứ 3
 Thư viện validate-form: react final form , formik , react hook form
 
 Solid principles
+
+
+Global store lưu trữ global state sử dụng cho nhiều component , lí do muốn dùng là nhiều thằng

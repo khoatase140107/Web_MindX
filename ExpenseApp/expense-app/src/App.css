@@ -1,4 +1,4 @@
-.App {
+/* .App {
   text-align: center;
 }
 
@@ -35,9 +35,16 @@
   to {
     transform: rotate(360deg);
   }
+} */
+
+*{
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
 }
 
-
-.label-top {
-  transform: translateY(-10px);
+.App{
+  width: 100vw;
+  height: 100vh;
+  background-color: #207766;
 }
