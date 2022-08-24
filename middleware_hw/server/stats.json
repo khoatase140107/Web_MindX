@@ -1,0 +1,14 @@
+[
+    {
+        "username": "alice",
+        "student": "2",
+        "teacher": "1",
+        "subject": "1"
+    },
+    {
+        "username": "charlie",
+        "student": "3",
+        "teacher": "0",
+        "subject": "3"
+    }
+]

@@ -3,13 +3,14 @@ import PieChart from "../../components/Chart";
 import CreateStatement from "../../components/CreateStatement";
 import ManageBalance from "../../components/ManageBalance";
 import { addStatementAPI } from "../../services/CategoryAPI";
+import { EXPENSE, INCOME } from "../../utils/types";
 import style from "./styles/style.css";
 function Home(props) {
   const [dataStatement, setDataStatement] = useState(null);
   const calcSum = () => {
     if (dataStatement !== null) {
       const calcSumAmount = dataStatement.reduce((a, b, index) => {
-        if (b.type === "Income") return a + +b.amount;
+        if (b.type === INCOME) return a + +b.amount;
         else return a - +b.amount;
       }, 0);
       return calcSumAmount;
@@ -28,13 +29,6 @@ function Home(props) {
     } catch (err) {
       console.error(err);
     }
-    // try {
-    //   addStatementAPI(data);
-
-    //   //
-    // } catch (err) {
-    //   console.error(err);
-    // }
   };
   const deleteValueInStatement = (index) => {
     const newDataStatement = [...dataStatement];
@@ -71,7 +65,7 @@ function Home(props) {
         >
           Expense
         </h1>
-        <PieChart dataStatement={dataStatement} type="Expense" />
+        <PieChart dataStatement={dataStatement} type={EXPENSE} />
       </div>
     </div>
   );
